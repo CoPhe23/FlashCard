@@ -67,15 +67,27 @@ export default function Topic() {
 
         <div className="desktopShorts">
           <div className="card" onClick={() => setShowAnswer((v) => !v)}>
-            <div className="cardLabel">{showAnswer ? "Válasz" : "Kérdés"}</div>
+            <div className={`flip ${showAnswer ? "isFlipped" : ""}`}>
+              <div className="face front">
+                <div className="cardLabel">Kérdés</div>
 
-            <div className="cardBody">
-              <p className="cardText">
-                {showAnswer ? card.answer : card.question}
-              </p>
+                <div className="cardBody">
+                  <p className="cardText">{card.question}</p>
+                </div>
+
+                <div className="tapHint">Tap/click → fordítás</div>
+              </div>
+
+              <div className="face back">
+                <div className="cardLabel">Válasz</div>
+
+                <div className="cardBody">
+                  <p className="cardText">{card.answer}</p>
+                </div>
+
+                <div className="tapHint">Tap/click → fordítás</div>
+              </div>
             </div>
-
-            <div className="tapHint">Tap/click → fordítás</div>
           </div>
 
           <div className="navArrows">
