@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { flashcards } from "../data/data";
 
 export default function Topic() {
+  const [touchStartY, setTouchStartY] = useState(null);
+  const [touchEndY, setTouchEndY] = useState(null);
+
   const { category } = useParams();
   const navigate = useNavigate();
 
@@ -62,32 +65,36 @@ export default function Topic() {
           <div style={{ width: 52 }} />
         </div>
 
-       <div className="desktopShorts">
-  <div
-    className="card"
-    onClick={() => setShowAnswer((v) => !v)}
-  >
-    <div className="cardLabel">
-      {showAnswer ? "Válasz" : "Kérdés"}
-    </div>
+        <div className="desktopShorts">
+          <div className="card" onClick={() => setShowAnswer((v) => !v)}>
+            <div className="cardLabel">{showAnswer ? "Válasz" : "Kérdés"}</div>
 
-    <div className="cardBody">
-      <p className="cardText">
-        {showAnswer ? card.answer : card.question}
-      </p>
-    </div>
+            <div className="cardBody">
+              <p className="cardText">
+                {showAnswer ? card.answer : card.question}
+              </p>
+            </div>
 
-    <div className="tapHint">
-      Tap/click → fordítás
-    </div>
-  </div>
+            <div className="tapHint">Tap/click → fordítás</div>
+          </div>
 
-  <div className="navArrows">
-    <button className="arrowBtn" onClick={goPrev} disabled={index === 0}>↑</button>
-    <button className="arrowBtn" onClick={goNext} disabled={index === cards.length - 1}>↓</button>
-  </div>
-</div>
-
+          <div className="navArrows">
+            <button
+              className="arrowBtn"
+              onClick={goPrev}
+              disabled={index === 0}
+            >
+              ↑
+            </button>
+            <button
+              className="arrowBtn"
+              onClick={goNext}
+              disabled={index === cards.length - 1}
+            >
+              ↓
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
