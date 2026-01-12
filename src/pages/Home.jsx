@@ -1,22 +1,16 @@
-import React, { useMemo, useState } from "react";
-import AccessKeyModal from "../components/AccessKeyModal";
-import { isAdmin } from "../utils/auth";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AccessKeyModal from "../components/AccessKeyModal";
 import { flashcards } from "../data/data";
+import { isAdmin } from "../utils/auth";
 
 export const Home = () => {
   const navigate = useNavigate();
   const [openKey, setOpenKey] = useState(false);
 
-  const [extraCats, setExtraCats] = useState(() => {
-    const saved = localStorage.getItem("flash_categories");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const categories = useMemo(() => {
-    const fromCards = flashcards.map((c) => c.category);
-    return [...new Set([...fromCards, ...extraCats])].filter(Boolean);
-  }, [extraCats]);
+  const baseCategories = [...new Set(flashcards.map(c => c.category))];
+  const stored = JSON.parse(localStorage.getItem("flash_categories") || "[]");
+  const categories = [...new Set([...baseCategories, ...stored])];
 
   const addCategoryPrompt = () => {
     const name = prompt("Új témakör neve:");
@@ -25,17 +19,23 @@ export const Home = () => {
     const trimmed = name.trim();
     if (!trimmed) return;
 
-    const exists = categories.some((c) => c.toLowerCase() === trimmed.toLowerCase());
+    const saved = JSON.parse(localStorage.getItem("flash_categories") || "[]");
+    const exists = saved.some(
+      c => c.toLowerCase() === trimmed.toLowerCase()
+    );
     if (exists) return;
 
-    const next = [...extraCats, trimmed];
-    setExtraCats(next);
+    const next = [...saved, trimmed];
     localStorage.setItem("flash_categories", JSON.stringify(next));
+    location.reload();
   };
 
   const onAddCategoryClick = () => {
-    if (isAdmin()) addCategoryPrompt();
-    else setOpenKey(true);
+    if (isAdmin()) {
+      addCategoryPrompt();
+    } else {
+      setOpenKey(true);
+    }
   };
 
   return (
@@ -48,8 +48,8 @@ export const Home = () => {
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          {categories.map((cat) => (
+        <div className="homeCats">
+          {categories.map(cat => (
             <button
               key={cat}
               className="arrowBtn"
@@ -59,7 +59,7 @@ export const Home = () => {
                 minWidth: 120,
                 justifyContent: "center",
                 fontSize: 14,
-                letterSpacing: 0.4,
+                letterSpacing: 0.4
               }}
               onClick={() => navigate(`/topic/${cat}`)}
             >
@@ -68,9 +68,11 @@ export const Home = () => {
           ))}
         </div>
 
-        <button className="addBtn" onClick={onAddCategoryClick}>
-          Új témakör hozzáadása
-        </button>
+        <div className="homeAddRow">
+          <button className="addBtn" onClick={onAddCategoryClick}>
+            Új témakör hozzáadása
+          </button>
+        </div>
       </div>
 
       <AccessKeyModal

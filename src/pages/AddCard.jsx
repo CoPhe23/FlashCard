@@ -36,31 +36,37 @@ export default function AddCard() {
     navigate(`/topic/${category}`);
   };
 
-  return (
-    <div className="page">
-      <div className="shell">
-        <button className="iconBtn" onClick={() => navigate(`/topic/${category}`)}>←</button>
+ return (
+  <div className="page">
+    <div className="addWrapPremium">
+      <button className="iconBtn" onClick={() => navigate(`/topic/${category}`)}>←</button>
 
-        <div className="addTitle">{category}</div>
+      <div className="addHeader">
+        <div className="addTitlePremium">{category}</div>
+        <div className="adminBadge">ADMIN MODE</div>
+      </div>
 
-        <textarea
-          className="addInput"
+      <div className="adminPanel">
+        <input
+          className="adminInput"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="kérdés..."
         />
 
-        <textarea
-          className="addInput"
+        <input
+          className="adminInput"
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           placeholder="válasz..."
         />
 
-        <button className="modalBtn" onClick={save}>Hozzáadás</button>
-
-        <button className="adminExitBtn" onClick={logout}>Kilépés admin módból</button>
+        <button className="addPrimaryBtn" onClick={save}>Hozzáadás</button>
       </div>
+
+      <button className="adminExitBtn" onClick={logout}>Kilépés admin módból</button>
     </div>
-  );
+  </div>
+);
+
 }

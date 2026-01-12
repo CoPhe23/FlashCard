@@ -202,11 +202,12 @@ body{
 .face.back{
   transform: rotateY(180deg);
 }
-
 .modalOverlay{
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -216,15 +217,18 @@ body{
 
 .modalCard{
   width: min(420px, 92vw);
-  border-radius: 12px;
-  background: #fff;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+  box-shadow: var(--shadow);
   padding: 16px;
-  color: #111;
+  color: var(--text);
 }
 
 .modalTitle{
   font-weight: 700;
   font-size: 18px;
+  letter-spacing: .2px;
 }
 
 .modalSub{
@@ -235,33 +239,339 @@ body{
 
 .modalLabel{
   margin-top: 14px;
-  font-size: 13px;
-  opacity: .9;
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .7;
 }
 
 .modalInput{
   width: 100%;
-  height: 36px;
-  margin-top: 6px;
-  border: 1px solid #cfd4dc;
-  border-radius: 6px;
-  padding: 0 10px;
+  height: 40px;
+  margin-top: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.25);
+  color: var(--text);
+  padding: 0 12px;
+  outline: none;
+}
+
+.modalInput:focus{
+  border-color: rgba(255,255,255,.28);
 }
 
 .modalBad{
-  border-color: #b3261e;
+  border-color: rgba(173,46,36,.9);
 }
 
 .modalBtn{
   width: 100%;
-  height: 36px;
+  height: 44px;
   margin-top: 14px;
-  border: none;
-  border-radius: 6px;
-  background: #1976d2;
-  color: white;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+.addBtn,
+.arrowBtn,
+.iconBtn,
+.modalBtn{
+  appearance: none;
+  -webkit-appearance: none;
+}
+.addBtn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 360px;
+  height: 44px;
+
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
   cursor: pointer;
 }
+
+.addWrapPremium{
+  width: min(520px, 92vw);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 0;
+  align-items: center;
+}
+
+.addHeader{
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.addTitlePremium{
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+.adminBadge{
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  opacity: .9;
+}
+
+.adminPanel{
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+  box-shadow: var(--shadow);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.adminInput{
+  width: 100%;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  padding: 0 12px;
+  outline: none;
+  letter-spacing: .2px;
+}
+
+.adminInput::placeholder{
+  opacity: .6;
+}
+
+.adminInput:focus{
+  border-color: rgba(255,255,255,.28);
+}
+
+.addPrimaryBtn{
+  width: 100%;
+  height: 48px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: .3px;
+  box-shadow: var(--shadow-soft);
+}
+
+.addPrimaryBtn:active{
+  transform: translateY(1px);
+}
+.topicHeader{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 52px 1fr 52px;
+  align-items: center;
+}
+
+.topicCenter{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.topicRightSpace{
+  width: 52px;
+  height: 52px;
+}
+
+.iconBtn{
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.shell{
+  padding-bottom: 96px;
+}
+
+.topicControls{
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.topicBottomBar{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.topicBottomBar .addBtn{
+  pointer-events: auto;
+  width: min(420px, 92vw);
+}
+
+
+.homeCats{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 560px;
+}
+
+.homeAddRow{
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.homeAddRow .addBtn{
+  width: min(420px, 92vw);
+}
+
+@media (min-width: 768px){
+  .topicBottomBar{
+    bottom: 18px;
+  }
+  .shell{
+    padding-bottom: 110px;
+  }
+}
+
+.arrowBtn,
+.addBtn,
+.iconBtn,
+.adminExitBtn,
+.addPrimaryBtn{
+  transition:
+    transform 140ms ease,
+    filter 140ms ease,
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    opacity 140ms ease;
+  transform: translateZ(0);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.arrowBtn:hover,
+.addBtn:hover,
+.iconBtn:hover,
+.adminExitBtn:hover,
+.addPrimaryBtn:hover{
+  transform: translateY(-1px) scale(1.01);
+  filter: brightness(1.06);
+}
+
+.arrowBtn:active,
+.addBtn:active,
+.iconBtn:active,
+.adminExitBtn:active,
+.addPrimaryBtn:active{
+  transform: translateY(0px) scale(0.98);
+  filter: brightness(0.98);
+}
+
+.arrowBtn:focus-visible,
+.addBtn:focus-visible,
+.iconBtn:focus-visible,
+.adminExitBtn:focus-visible,
+.addPrimaryBtn:focus-visible{
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,.12),
+    0 0 0 6px rgba(234,140,85,.14);
+}
+
+.arrowBtn:disabled,
+.addBtn:disabled,
+.iconBtn:disabled,
+.adminExitBtn:disabled,
+.addPrimaryBtn:disabled{
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+@media (hover: none){
+  .arrowBtn:hover,
+  .addBtn:hover,
+  .iconBtn:hover,
+  .adminExitBtn:hover,
+  .addPrimaryBtn:hover{
+    transform: none;
+    filter: none;
+  }
+}
+
+
+.addBtn,
+.addPrimaryBtn{
+  position: relative;
+  overflow: hidden;
+}
+
+.addBtn::after,
+.addPrimaryBtn::after{
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.12), transparent 55%);
+  transform: translateX(-30%) translateY(-10%);
+  opacity: 0;
+  transition: opacity 180ms ease, transform 260ms ease;
+  pointer-events: none;
+}
+
+.addBtn:hover::after,
+.addPrimaryBtn:hover::after{
+  opacity: 1;
+  transform: translateX(0%) translateY(0%);
+}
+
 
 
 @media (prefers-reduced-motion: reduce){

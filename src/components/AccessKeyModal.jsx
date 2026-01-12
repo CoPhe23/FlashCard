@@ -36,7 +36,10 @@ export default function AccessKeyModal({ open, onClose, onSuccess }) {
           type="password"
         />
 
-        <button className="modalBtn" onClick={login}>Belépés</button>
+        <button className="arrowBtn" style={{ width: "100%", height: 44, borderRadius: 14 }} onClick={login}>
+  Belépés
+</button>
+
       </div>
     </div>
   );
