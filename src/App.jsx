@@ -5,6 +5,8 @@ import Topic from './pages/Topic'
 
 
 export function App() {
+  const LS_CATEGORIES = "flash_categories";
+  const LS_CARDS = "flash_cards";
 
 
   return (

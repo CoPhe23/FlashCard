@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { flashcards } from "../data/data";
+import AccessKeyModal from "../components/AccessKeyModal";
+import { isAdmin } from "../utils/auth";
+
 
 export default function Topic() {
   const [touchStartY, setTouchStartY] = useState(null);
@@ -13,6 +16,14 @@ export default function Topic() {
 
   const [index, setIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+
+    const [openKey, setOpenKey] = useState(false);
+
+const goAdd = () => {
+  if (isAdmin()) navigate(`/add/${category}`);
+  else setOpenKey(true);
+};
+
 
   if (cards.length === 0) {
     return (
@@ -105,6 +116,14 @@ export default function Topic() {
             >
               ↓
             </button>
+                <button className="addBtn" onClick={goAdd}>Új kártya hozzáadása</button>
+
+<AccessKeyModal
+  open={openKey}
+  onClose={() => setOpenKey(false)}
+  onSuccess={() => navigate(`/add/${category}`)}
+/>
+  
           </div>
         </div>
       </div>

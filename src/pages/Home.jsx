@@ -1,12 +1,42 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import { flashcards } from '../data/data';
+import React, { useMemo, useState } from "react";
+import AccessKeyModal from "../components/AccessKeyModal";
+import { isAdmin } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
+import { flashcards } from "../data/data";
 
 export const Home = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [openKey, setOpenKey] = useState(false);
 
-    const categories = [...new Set(flashcards.map((c) => c.category))];
+  const [extraCats, setExtraCats] = useState(() => {
+    const saved = localStorage.getItem("flash_categories");
+    return saved ? JSON.parse(saved) : [];
+  });
 
+  const categories = useMemo(() => {
+    const fromCards = flashcards.map((c) => c.category);
+    return [...new Set([...fromCards, ...extraCats])].filter(Boolean);
+  }, [extraCats]);
+
+  const addCategoryPrompt = () => {
+    const name = prompt("Új témakör neve:");
+    if (!name) return;
+
+    const trimmed = name.trim();
+    if (!trimmed) return;
+
+    const exists = categories.some((c) => c.toLowerCase() === trimmed.toLowerCase());
+    if (exists) return;
+
+    const next = [...extraCats, trimmed];
+    setExtraCats(next);
+    localStorage.setItem("flash_categories", JSON.stringify(next));
+  };
+
+  const onAddCategoryClick = () => {
+    if (isAdmin()) addCategoryPrompt();
+    else setOpenKey(true);
+  };
 
   return (
     <div className="page">
@@ -37,8 +67,20 @@ export const Home = () => {
             </button>
           ))}
         </div>
-      </div>
-    </div>
-  )
-}
 
+        <button className="addBtn" onClick={onAddCategoryClick}>
+          Új témakör hozzáadása
+        </button>
+      </div>
+
+      <AccessKeyModal
+        open={openKey}
+        onClose={() => setOpenKey(false)}
+        onSuccess={() => {
+          setOpenKey(false);
+          addCategoryPrompt();
+        }}
+      />
+    </div>
+  );
+};
