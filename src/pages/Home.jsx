@@ -1,57 +1,94 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AccessKeyModal from "../components/AccessKeyModal";
-import { flashcards } from "../data/data";
-import { isAdmin } from "../utils/auth";
+
+const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 
 export const Home = () => {
   const navigate = useNavigate();
+
+  const [topics, setTopics] = useState([]);
   const [openKey, setOpenKey] = useState(false);
+  const [admin, setAdmin] = useState(false);
 
-  const baseCategories = [...new Set(flashcards.map(c => c.category))];
-  const stored = JSON.parse(localStorage.getItem("flash_categories") || "[]");
-  const categories = [...new Set([...baseCategories, ...stored])];
+  const loadTopics = async () => {
+    const r = await fetch(`${API}/api/topics`, { credentials: "include" });
+    const data = await r.json();
+    setTopics(Array.isArray(data) ? data : []);
+  };
 
-  const addCategoryPrompt = () => {
+  const loadMe = async () => {
+    const r = await fetch(`${API}/api/auth/me`, { credentials: "include" });
+    const data = await r.json();
+    setAdmin(!!data?.admin);
+  };
+
+  useEffect(() => {
+    loadMe();
+    loadTopics();
+  }, []);
+
+  const addCategoryPrompt = async () => {
     const name = prompt("Új témakör neve:");
     if (!name) return;
 
     const trimmed = name.trim();
     if (!trimmed) return;
 
-    const saved = JSON.parse(localStorage.getItem("flash_categories") || "[]");
-    const exists = saved.some(
-      c => c.toLowerCase() === trimmed.toLowerCase()
-    );
-    if (exists) return;
+    const r = await fetch(`${API}/api/topics`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ name: trimmed }),
+    });
 
-    const next = [...saved, trimmed];
-    localStorage.setItem("flash_categories", JSON.stringify(next));
-    location.reload();
+    if (!r.ok) return;
+
+    loadTopics();
   };
 
-  const onAddCategoryClick = () => {
-    if (isAdmin()) {
-      addCategoryPrompt();
-    } else {
-      setOpenKey(true);
-    }
+  const onAddCategoryClick = async () => {
+    const r = await fetch(`${API}/api/auth/me`, { credentials: "include" });
+    const data = await r.json();
+
+    if (data?.admin) addCategoryPrompt();
+    else setOpenKey(true);
+  };
+
+  const logoutAdmin = async () => {
+    await fetch(`${API}/api/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+    setAdmin(false);
   };
 
   return (
     <div className="page">
       <div className="shell">
-        <div className="header">
+        <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
           <div>
             <h1 className="title">FlashCards</h1>
             <div className="subtle">Mobile-first by design.</div>
           </div>
+
+          {admin && (
+  <button
+    className="adminExitBtn"
+    onClick={logoutAdmin}
+    title="Kilépés admin módból"
+  >
+    ⛨
+  </button>
+)}
+
         </div>
 
         <div className="homeCats">
-          {categories.map(cat => (
+          {topics.map((t) => (
             <button
-              key={cat}
+              key={t.id}
               className="arrowBtn"
               style={{
                 width: "auto",
@@ -59,11 +96,12 @@ export const Home = () => {
                 minWidth: 120,
                 justifyContent: "center",
                 fontSize: 14,
-                letterSpacing: 0.4
+                letterSpacing: 0.4,
               }}
-              onClick={() => navigate(`/topic/${cat}`)}
+              onClick={() => navigate(`/topic/${t.id}`)}
+
             >
-              {cat}
+              {t.name}
             </button>
           ))}
         </div>
@@ -78,8 +116,9 @@ export const Home = () => {
       <AccessKeyModal
         open={openKey}
         onClose={() => setOpenKey(false)}
-        onSuccess={() => {
+        onSuccess={async () => {
           setOpenKey(false);
+          await loadMe();
           addCategoryPrompt();
         }}
       />
