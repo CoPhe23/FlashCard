@@ -1,1 +1,1 @@
-link helye xd
+https://flashcardsbmm.netlify.app/
